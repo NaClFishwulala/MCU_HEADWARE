@@ -59,8 +59,6 @@ void OLED_ShowString(unsigned char x,unsigned char y, unsigned char *p,unsigned 
 void OLED_Set_Pos(unsigned char x, unsigned char y);
 void OLED_ShowCHinese(unsigned char x,unsigned char y,unsigned char no);
 void OLED_DrawBMP(unsigned char x0, unsigned char y0,unsigned char x1, unsigned char y1,unsigned char BMP[]);
-void Delay_50ms(unsigned int Del_50ms);
-void Delay_1ms(unsigned int Del_1ms);
 void fill_picture(unsigned char fill_Data);
 void Picture(void);
 void IIC_Start(void);
@@ -68,8 +66,10 @@ void IIC_Stop(void);
 void Write_IIC_Command(unsigned char IIC_Command);
 void Write_IIC_Data(unsigned char IIC_Data);
 void Write_IIC_Byte(unsigned char IIC_Byte);
-
 void IIC_Wait_Ack(void);
+
+void OLED_DrawScreen(void);
+void OLED_DrawCol(unsigned char x,unsigned char y,int col,unsigned char no);
 #endif  
 	 
 
