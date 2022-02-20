@@ -51,7 +51,6 @@ void OLED_Display_On(void);
 void OLED_Display_Off(void);	   							   		    
 void OLED_Init(void);
 void OLED_Clear(void);
-void OLED_DrawPoint(unsigned char x,unsigned char y,unsigned char t);
 void OLED_Fill(unsigned char x1,unsigned char y1,unsigned char x2,unsigned char y2,unsigned char dot);
 void OLED_ShowChar(unsigned char x,unsigned char y,unsigned char chr,unsigned char Char_Size);
 void OLED_ShowNum(unsigned char x,unsigned char y,unsigned int num,unsigned char len,unsigned char size);
@@ -70,6 +69,7 @@ void IIC_Wait_Ack(void);
 
 void OLED_DrawScreen(void);
 void OLED_DrawCol(unsigned char x,unsigned char y,int col,unsigned char no);
+void OLED_DrawPoint(unsigned char x_pos,unsigned char y_pos);
 #endif  
 	 
 

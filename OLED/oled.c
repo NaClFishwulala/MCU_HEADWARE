@@ -141,26 +141,6 @@ void fill_picture(unsigned char fill_Data)
 			}
 	}
 }
-//画点 自己写的测试用
-void OLED_DrawPoint(unsigned char x,unsigned char y,unsigned char t)
-{
-	OLED_Set_Pos(0,0);	
-	OLED_WR_Byte(0xff,OLED_DATA);	 
-	OLED_Set_Pos(0,1);	
-	OLED_WR_Byte(0xff,OLED_DATA);
-	OLED_Set_Pos(0,2);		
-	OLED_WR_Byte(0xff,OLED_DATA);
-	OLED_Set_Pos(0,3);
-	OLED_WR_Byte(0xff,OLED_DATA);
-	OLED_Set_Pos(0,4);
-	OLED_WR_Byte(0xff,OLED_DATA);
-	OLED_Set_Pos(0,5);
-	OLED_WR_Byte(0xff,OLED_DATA);
-	OLED_Set_Pos(0,6);
-	OLED_WR_Byte(0xff,OLED_DATA);
-	OLED_Set_Pos(0,7);
-	OLED_WR_Byte(0xff,OLED_DATA);
-}
 
 //坐标设置
 void OLED_Set_Pos(unsigned char x, unsigned char y) 
@@ -285,18 +265,37 @@ void OLED_ShowCHinese(unsigned char x,unsigned char y,unsigned char no)
 	unsigned char t;
 	OLED_Set_Pos(x,y);	
 	for(t=0;t<16;t++)
-		OLED_WR_Byte(BMP[2*no][t],OLED_DATA);	
+		OLED_WR_Byte(Hzk[2*no][t],OLED_DATA);	
 	OLED_Set_Pos(x,y+1);	
 	for(t=0;t<16;t++)
-		OLED_WR_Byte(BMP[2*no+1][t],OLED_DATA);				
+		OLED_WR_Byte(Hzk[2*no+1][t],OLED_DATA);				
 }
 
+//自己写的
+
+/*
+//OLED_DrawPoint
+//功能：画点
+//参数: x(起始点横坐标0~128)
+//			y(起始点纵坐标0~63)			
+*/
+void OLED_DrawPoint(unsigned char x_pos,unsigned char y_pos)
+{
+	//先根据纵坐标y计算在第几页的第几个像素点
+	unsigned char page = y_pos / 8;
+	unsigned char dot = y_pos % 8;
+	unsigned char data = 0x01;
+	for(int i=0;i<dot-1;i++)
+		data <<= 1;
+	OLED_Set_Pos(x_pos,page);
+	OLED_WR_Byte(data,OLED_DATA);
+}
 
 /*
 //函数：OLED_DrawCol
 //功能：画n列的点阵
 //参数: x(起始点横坐标)
-//			y(起始点纵坐标)
+//			y(起始点页数0~7)
 //			col(二维数组的列数)
 //			no(二维数组下标)
 */
