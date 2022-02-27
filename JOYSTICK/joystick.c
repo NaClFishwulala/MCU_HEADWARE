@@ -1,24 +1,48 @@
 #include "joystick.h"
 
-
+/**
+* @brief  ADC中断回调函数，计算获得数组中的adc采样值
+* @param  hadc: ADC handle
+* @retval 获取joystick状态
+*/
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 {
 	if(hadc->Instance == ADC1)
 	{
-		unsigned int ad1 = 0;
-		unsigned int ad2 = 0;
+		unsigned int x = 0;
+		unsigned int y = 0;
+
 		for(int i = 0; i < 50;)
 		{
-			ad1 += adc_buff[i++];
-			ad2 += adc_buff[i++];
+			x += adc_buff[i++];
+			y += adc_buff[i++];
 		}
 			
-		ad1 = ad1 / 25 * 330 / 4096;
-		ad2 = ad2 / 25 * 330 / 4096;
+		x = x / 25 * 330 / 4096;
+		y = y / 25 * 330 / 4096;
 		
-		#if 1
-		printf("\n\r ADC1_Volt:%d.%d%d \n\r",ad1/100,(ad1/100)%10,ad1%10);
-		printf("\n\r ADC2_Volt:%d.%d%d \n\r",ad2/100,(ad2/100)%10,ad2%10);
-		#endif
+		if(y >= 300)
+			dirction = up;
+		else if(y <= 30)
+			dirction = down;
+		else if(x >= 300)
+			dirction = left;
+		else if(x <= 30)
+			dirction = right;
 	}
 }
+
+/**
+* @brief  开启ADC采集
+* @param  None
+* @retval 触发ADC回调函数
+*/
+//void GetJoyStickStatus(void)
+//{
+
+//		
+//		#if 0
+//		printf("\n\r x:%d ADC1_Volt:%d.%d%d \n\r",x,x/100,(x/100)%10,x%10);
+//		printf("\n\r y:%d ADC2_Volt:%d.%d%d \n\r",y,y/100,(y/100)%10,y%10);
+//		#endif
+//}

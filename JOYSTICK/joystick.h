@@ -4,6 +4,13 @@
 #include "stdio.h"
 #include "adc.h" 
 
-extern unsigned short adc_buff[50];
+enum DIRECTION
+{
+		up,down,left,right
+};
 
+extern unsigned short adc_buff[50];
+extern int dirction;
+
+void GetJoyStickStatus(void);
 #endif 
