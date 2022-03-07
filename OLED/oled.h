@@ -44,6 +44,12 @@
 #define OLED_CMD  0	//Ð´ÃüÁî
 #define OLED_DATA 1	//Ð´Êý¾Ý
 
+//ÆÁÄ»»º´æ
+#define Column 128
+#define ROW 8
+#define WRITE 0
+#define CLEAR 1
+
 
 //OLED¿ØÖÆÓÃº¯Êý
 void OLED_WR_Byte(unsigned dat,unsigned cmd);  
@@ -70,6 +76,9 @@ void IIC_Wait_Ack(void);
 void OLED_DrawScreen(void);
 void OLED_DrawCol(unsigned char x,unsigned char y,int col,unsigned char no);
 void OLED_DrawPoint(unsigned char x_pos,unsigned char y_pos);
+void OLED_CacheClear(void);
+void OLED_DrawCache(void);
+void PointToCache(unsigned char x_pos,unsigned char y_pos,unsigned char flag,unsigned char size);
 #endif  
 	 
 

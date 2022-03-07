@@ -22,8 +22,12 @@
 
 #include "oled.h"
 #include "stdlib.h"
+#include "string.h"
 #include "oledfont.h"  	 
+
+
 //OLED的显存
+unsigned char oled_cache[8][128] = {0};
 //存放格式如下.
 //[0]0 1 2 3 ... 127	
 //[1]0 1 2 3 ... 127	
@@ -321,8 +325,57 @@ void OLED_DrawScreen(void)
 		for(int j=0;j<8;j++)
 			OLED_DrawCol(j*16,i,16,count++);
 	}
-
 }
+
+void OLED_CacheClear(void)
+{
+	for(int i=0;i<8;i++)
+		memset(oled_cache,0,128*sizeof(unsigned char));
+}
+
+/**
+* @brief  将位坐标映射成oled_cache值
+* @param  x_pos 位图的横坐标
+* @param  y_pos 位图的纵坐标
+* @param  flag 可取WRITE(写点阵)&CLEAR(清点阵)
+* @param  size 生成点阵的大小：1~7
+* @retval 根据位坐标生成size*size的点阵，将其映射写入(或清除)oled_cache
+*/
+void PointToCache(unsigned char x_pos,unsigned char y_pos,unsigned char flag,unsigned char size)
+{
+	//先根据纵坐标y计算在第几页的第几个像素点
+	for(int i=0;i<size;i++)
+	{
+		unsigned char page = (y_pos+i) / 8;
+		unsigned char dot = (y_pos+i) % 8;
+		unsigned char data = 0x01;
+		for(int m=0;m<dot;m++)
+			data <<= 1;
+		if(flag == WRITE)
+		{
+			for(int j=0;j<size;j++)
+				oled_cache[page][x_pos+j] |= data;
+		}
+		else if(flag == CLEAR)
+		{
+			for(int j=0;j<size;j++)
+				oled_cache[page][x_pos+j] &= (~data);
+		}
+	}
+}
+
+void OLED_DrawCache(void)
+{
+	for(int i=0;i<ROW;i++)
+	{
+		for(int j=0;j<Column;j++)
+		{
+			OLED_Set_Pos(j,i);
+			OLED_WR_Byte(oled_cache[i][j],OLED_DATA);
+		}
+	}
+}
+
 /***********功能描述：显示显示BMP图片128×64起始点坐标(x,y),x的范围0～127，y为页的范围0～7*****************/
 void OLED_DrawBMP(unsigned char x0, unsigned char y0,unsigned char x1, unsigned char y1,unsigned char BMP[])
 { 	
